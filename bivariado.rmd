@@ -1,0 +1,117 @@
+---
+title: "Análisis Bivariado"
+author: "Paúl Arévalo, Esteban Vizhñay"
+date: "2024-07-04"
+output: 
+  pdf_document:
+    extra_dependencies: ["fvextra"]
+    includes:
+      in_header: header.tex
+---
+
+```{r}
+# Importar librerías
+library(tidyverse)
+```
+
+```{r}
+DatosBivariados <- read.csv("DatosBivariados.csv")
+DatosBivariados
+```
+
+## Análisis Descriptivo
+
+### Gráfico de Dispersión
+```{r}
+# Gráfico de dispersión
+ggplot(DatosBivariados, aes(x = Peso, y = Altura)) +
+  geom_point() +
+  labs(
+    title = "Relación entre Peso y Altura",
+    x = "Peso (kg)", y = "Altura (cm)"
+  )
+```
+
+El gráfico de dispersión muestra una tendencia lineal ascendente, lo que confirma la correlación positiva
+entre las variables.
+
+### Medidas de Tendencia Central y Dispersión
+
+```{r}
+# Medidas de tendencia central y dispersión
+summary(DatosBivariados)
+```
+
+• La media del peso es de 68.5 kg, lo que indica que la mayoría de las personas se encuentran en un
+rango cercano a este valor.
+• La media de la altura es de 167.9 cm, lo que indica que la mayoría de las personas se encuentran en
+un rango cercano a este valor.
+• La desviación estándar del peso es de 7.15 kg, lo que sugiere que hay una variabilidad moderada en el
+peso de las personas.
+• La desviación estándar de la altura es de 6.55 cm, lo que sugiere que hay una variabilidad moderada
+en la altura de las personas.
+
+### Coeficiente de Correlación
+```{r}
+cor(DatosBivariados$Peso, DatosBivariados$Altura)
+```
+
+El coeficiente de correlación de Pearson es de 0.84, lo que indica una correlación positiva moderada entre
+el peso y la altura. Esto significa que existe una relación positiva entre las dos variables: a medida que
+aumenta la altura, también tiende a aumentar el peso.
+
+### Interpretación
+
+El análisis descriptivo muestra que existe una correlación positiva moderada entre el peso y la altura de las
+personas. Esto significa que, a medida que aumenta la altura, también tiende a aumentar el peso.
+El gráfico de dispersión muestra una tendencia lineal ascendente, lo que confirma la correlación positiva entre
+las variables.
+Las medidas de tendencia central y dispersión proporcionan información adicional sobre la distribución de
+los datos. Por ejemplo, la media del peso es de 68.5 kg, lo que indica que la mayoría de las personas se
+encuentran en un rango cercano a este valor. La desviación estándar del peso es de 7.15 kg, lo que sugiere
+que hay una variabilidad moderada en el peso de las personas.
+
+## Análisis Inferencial
+
+En el análisis previo se realizó un análisis descriptivo y exploratorio de la relación entre el peso y la altura
+de las personas. Se encontró una correlación positiva moderada entre las variables. Ahora se profundizará
+en el análisis mediante técnicas de inferencia estadística para determinar si la correlación observada entre el
+peso y la altura es estadísticamente significativa.
+
+### Hipótesis
+
+• **\(H_0\):** La correlación entre el peso y la altura es igual a cero (no existe relación lineal).
+• **\(H_a\):** La correlación entre el peso y la altura es diferente de cero (existe una relación lineal distinta de
+cero).
+
+En este caso vamos a utilizar la funcion cor.test del paquete stats para realizar la prueba de hipótesis para
+la correlación.
+
+```{r}
+# Prueba de correlación de Pearson
+resultado_prueba <- cor.test(DatosBivariados$Peso, DatosBivariados$Altura)
+resultado_prueba
+```
+
+• **Valor p:** El valor p es de 0.0001, que es menor que el nivel de significancia (a) comúnmente utilizado
+de 0.05. Esto significa que se rechaza la hipótesis nula y se concluye que existe una relación lineal
+significativa entre el peso y la altura
+
+## Modelo de Regresión Lineal Simple
+
+El objetivo de este análisis es ajustar un modelo de regresión lineal simple que describa la relación lineal
+entre el peso (variable dependiente) y la altura (variable independiente).
+Se utiliza la función lm() del paquete stats para ajustar el modelo de regresión lineal simple.
+
+```{r}
+# Modelo de regresión lineal simple
+modelo_regresion <- lm(Altura ~ Peso, data = DatosBivariados)
+# Resumen del modelo
+summary(modelo_regresion)
+```
+
+```{r}
+# Coeficiente alfa (intercepto)
+alfa <- coef(modelo_regresion)[1]
+alfa
+```
